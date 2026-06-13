@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>PRONOSEBE — On ne parle que quand on sait</title>
+<meta name="theme-color" content="#0B3D2E" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --forest:#0B3D2E; --pitch:#14532D; --gold:#C49A3A; --gold-soft:#D8B45E;
+    --ivory:#F5F2E9; --green-grey:#7C8B82; --line:rgba(245,242,233,0.12);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body {
+    background:var(--forest); color:var(--ivory);
+    font-family:'Inter',system-ui,sans-serif;
+    min-height:100vh;
+  }
+  #app { max-width:440px; margin:0 auto; position:relative; min-height:100vh; overflow:hidden; }
+  button { font-family:inherit; cursor:pointer; }
+  .serif { font-family:'Fraunces',Georgia,serif; }
+
+  header { padding:22px 20px 14px; border-bottom:1px solid var(--line); }
+  .head-row { display:flex; align-items:center; gap:10px; }
+  .back-btn {
+    background:none; border:1px solid var(--line); border-radius:10px;
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    color:var(--ivory); font-size:18px; line-height:1; padding:0; flex-shrink:0;
+  }
+  .logo-btn { background:none; border:none; padding:0; display:flex; align-items:center; gap:8px; }
+  .logo { font-family:'Fraunces',serif; font-size:24px; font-weight:600; color:var(--ivory); letter-spacing:0.5px; }
+  .logo span { color:var(--gold); }
+  .check { color:var(--gold); font-size:18px; margin-left:-2px; }
+  .tagline { font-size:12px; color:var(--green-grey); margin-top:4px; font-style:italic; }
+
+  .screen { padding:8px 20px 100px; }
+  .eyebrow { font-size:13px; letter-spacing:2px; color:var(--green-grey); text-transform:uppercase; }
+  .top-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:24px; }
+  .intro { font-size:13px; color:var(--green-grey); margin-bottom:18px; line-height:1.5; }
+
+  .card {
+    width:100%; text-align:left; background:var(--pitch); border:1px solid var(--line);
+    border-radius:18px; padding:18px 18px 16px; margin-bottom:14px; display:block;
+  }
+  .card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .card-meta { font-size:11px; letter-spacing:1px; color:var(--green-grey); text-transform:uppercase; }
+  .badge { font-size:12px; font-weight:700; color:var(--forest); background:var(--gold); border-radius:20px; padding:3px 10px; }
+  .teams { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .team { font-family:'Fraunces',serif; font-size:21px; color:var(--ivory); font-weight:600; }
+  .vs { font-size:13px; color:var(--green-grey); }
+  .pred-row { display:flex; align-items:center; gap:8px; }
+  .dot { width:7px; height:7px; border-radius:50%; background:var(--gold); }
+  .pred { font-size:14px; color:var(--gold-soft); font-weight:600; }
+  .market { font-size:12px; color:var(--green-grey); margin-left:auto; }
+
+  .silence { text-align:center; padding:60px 10px; }
+  .silence-title { font-family:'Fraunces',serif; font-size:30px; line-height:1.3; color:var(--ivory); margin-bottom:18px; }
+  .silence-text { font-size:14px; color:var(--green-grey); max-width:260px; margin:0 auto; line-height:1.6; }
+
+  .detail-cat { font-size:11px; letter-spacing:1px; color:var(--green-grey); text-transform:uppercase; }
+  .detail-title { font-family:'Fraunces',serif; font-size:30px; color:var(--ivory); font-weight:600; margin:8px 0 4px; line-height:1.15; }
+  .detail-title small { color:var(--green-grey); font-size:18px; }
+  .detail-date { font-size:13px; color:var(--green-grey); margin:0 0 22px; }
+  .gauge-wrap { display:flex; justify-content:center; margin-bottom:8px; }
+  .advice {
+    background:var(--pitch); border:1px solid var(--gold); border-radius:16px;
+    padding:16px 18px; margin-bottom:26px; text-align:center;
+  }
+  .advice-label { font-size:11px; letter-spacing:1px; color:var(--green-grey); text-transform:uppercase; margin-bottom:6px; }
+  .advice-pred { font-family:'Fraunces',serif; font-size:22px; color:var(--gold-soft); font-weight:600; }
+  .crit-title { font-size:12px; letter-spacing:1.5px; color:var(--green-grey); text-transform:uppercase; margin:0 0 16px; }
+  .crit { margin-bottom:16px; }
+  .crit-head { display:flex; justify-content:space-between; margin-bottom:6px; }
+  .crit-name { font-size:14px; color:var(--ivory); }
+  .crit-val { font-size:13px; color:var(--green-grey); }
+  .bar { height:6px; border-radius:6px; background:rgba(245,242,233,0.1); overflow:hidden; }
+  .bar-fill { height:100%; background:var(--gold); border-radius:6px; }
+  .disclaimer { font-size:12px; color:var(--green-grey); line-height:1.6; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); }
+
+  .hist-big { text-align:center; margin-bottom:30px; }
+  .hist-rate { font-family:'Fraunces',serif; font-size:64px; color:var(--gold); font-weight:600; line-height:1; }
+  .hist-sub { font-size:13px; color:var(--green-grey); margin-top:6px; }
+  .hist-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line); }
+  .hist-match { font-size:14px; color:var(--ivory); margin-bottom:2px; }
+  .hist-prono { font-size:12px; color:var(--green-grey); }
+  .chip { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:4px 10px; border-radius:20px; }
+  .chip-win { color:var(--forest); background:var(--gold); }
+  .chip-loss { color:var(--ivory); background:rgba(245,242,233,0.12); }
+
+  nav {
+    position:fixed; bottom:0; left:0; right:0; max-width:440px; margin:0 auto;
+    background:var(--forest); border-top:1px solid var(--line);
+    display:flex; padding:10px 20px 22px;
+  }
+  nav button { flex:1; background:none; border:none; font-size:13px; padding:6px 0; color:var(--green-grey); }
+  nav button.active { color:var(--gold); font-weight:700; }
+
+  .loading { text-align:center; padding:60px 10px; color:var(--green-grey); font-size:14px; }
+
+  @media (prefers-reduced-motion:no-preference) {
+    .card,.bar-fill { transition:all .2s ease; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="head-row">
+      <button id="backBtn" class="back-btn" aria-label="Revenir en arrière" style="display:none">←</button>
+      <button id="logoBtn" class="logo-btn" aria-label="Aller à l'accueil">
+        <span class="logo">PRONO<span>SEBE</span></span>
+        <span class="check">✓</span>
+      </button>
+    </div>
+    <p id="tagline" class="tagline">On ne parle que quand on sait.</p>
+  </header>
+  <main id="content">
+    <div class="loading">Chargement…</div>
+  </main>
+  <nav id="nav">
+    <button data-vue="accueil" class="active">Pronostics</button>
+    <button data-vue="historique">Historique</button>
+  </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================================
+// CONFIGURATION — remplace COLLE_TA_CLE_ANON_ICI par ta clé anon/publishable
+// ============================================================
+const SUPABASE_URL = "https://qccaovvbfgmwjnzwdavy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_B7GNA4wyMIRB9gGP9AVPmA_D-Ne9Fkj";
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const LABELS = { niveau:"Écart de niveau", dominance:"Dominance", attaque_defense:"Attaque / défense", contexte:"Contexte" };
+const MAX = { niveau:35, dominance:30, attaque_defense:20, contexte:15 };
+
+let state = { vue:"accueil", detail:null, pronos:[], histo:null, loaded:false };
+
+// ---- Récupération des données ----
+async function chargerPronos() {
+  // Jointure : pronostics publiés + détail du match analysé
+  const { data, error } = await sb
+    .from("pronostics_publies")
+    .select("*, matchs_analyses(*)")
+    .eq("resultat", "en_attente")
+    .order("score_confiance", { ascending:false });
+  if (error) { console.error(error); return []; }
+  return (data || []).map(p => {
+    const m = p.matchs_analyses || {};
+    return {
+      id: p.id,
+      dom: m.equipe_dom || "?", ext: m.equipe_ext || "?",
+      championnat: m.championnat || "Coupe du Monde 2026",
+      favori: m.favori || "", date: formatDate(m.date_match),
+      score: p.score_confiance, prediction: p.prediction,
+      marche: p.marche === "victoire" ? "Victoire" : "Double chance",
+      criteres: m.detail_scores || {},
+    };
+  });
+}
+
+async function chargerHisto() {
+  const { data } = await sb.from("pronostics_publies")
+    .select("prediction, score_confiance, resultat")
+    .in("resultat", ["gagne","perdu"])
+    .order("verifie_le", { ascending:false });
+  const rows = data || [];
+  const gagnes = rows.filter(r => r.resultat === "gagne").length;
+  const total = rows.length;
+  return {
+    taux: total ? Math.round(1000 * gagnes / total) / 10 : 0,
+    total, gagnes, perdus: total - gagnes,
+    recents: rows.slice(0, 8),
+  };
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const auj = new Date();
+  const demain = new Date(Date.now() + 86400000);
+  const h = d.getHours().toString().padStart(2,"0") + ":" + d.getMinutes().toString().padStart(2,"0");
+  if (d.toDateString() === auj.toDateString()) return "Aujourd'hui · " + h;
+  if (d.toDateString() === demain.toDateString()) return "Demain · " + h;
+  return d.toLocaleDateString("fr-FR", { day:"numeric", month:"long" }) + " · " + h;
+}
+
+// ---- Jauge SVG ----
+function gauge(score, size=150) {
+  const r = size/2 - 10, cx = size/2, cy = size/2;
+  const circ = Math.PI * r;
+  const dash = circ * Math.max(0, Math.min(100, score)) / 100;
+  return `
+    <div style="position:relative;width:${size}px;height:${size/2+14}px">
+      <svg width="${size}" height="${size/2+14}" viewBox="0 0 ${size} ${size/2+14}">
+        <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="rgba(245,242,233,0.14)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M ${cx-r} ${cy} A ${r} ${r} 0 0 1 ${cx+r} ${cy}" fill="none" stroke="var(--gold)" stroke-width="9" stroke-linecap="round" stroke-dasharray="${dash} ${circ}"/>
+      </svg>
+      <div style="position:absolute;inset:0;top:18px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+        <span class="serif" style="font-size:${size*0.3}px;font-weight:600;color:var(--ivory);line-height:1">${score}</span>
+        <span style="font-size:10px;letter-spacing:1.5px;color:var(--green-grey);text-transform:uppercase;margin-top:2px">confiance</span>
+      </div>
+    </div>`;
+}
+
+// ---- Rendu des écrans ----
+function render() {
+  const content = document.getElementById("content");
+  const backBtn = document.getElementById("backBtn");
+  const tagline = document.getElementById("tagline");
+  const nav = document.getElementById("nav");
+
+  const horsAccueil = state.detail !== null || state.vue !== "accueil";
+  backBtn.style.display = horsAccueil ? "flex" : "none";
+  tagline.style.display = horsAccueil ? "none" : "block";
+  nav.style.display = state.detail ? "none" : "flex";
+
+  [...nav.children].forEach(b => b.classList.toggle("active", b.dataset.vue === state.vue));
+
+  if (!state.loaded) { content.innerHTML = '<div class="loading">Chargement…</div>'; return; }
+  if (state.detail) { content.innerHTML = renderDetail(state.detail); return; }
+  if (state.vue === "accueil") { content.innerHTML = renderAccueil(); bindCards(); return; }
+  content.innerHTML = renderHisto();
+}
+
+function renderAccueil() {
+  const today = new Date().toLocaleDateString("fr-FR", { day:"numeric", month:"long" });
+  if (state.pronos.length === 0) {
+    return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics du jour</h2><span class="card-meta">${today}</span></div>
+      <div class="silence">
+        <div class="silence-title">On ne parle que<br>quand on sait.</div>
+        <p class="silence-text">Aucun match ne remplit nos critères aujourd'hui. Revenez demain — le silence aussi est un conseil.</p>
+      </div></div>`;
+  }
+  const cards = state.pronos.map((p,i) => `
+    <button class="card" data-idx="${i}">
+      <div class="card-top"><span class="card-meta">${p.championnat} · ${p.date}</span><span class="badge">${p.score}</span></div>
+      <div class="teams"><span class="team">${p.dom}</span><span class="vs">vs</span><span class="team">${p.ext}</span></div>
+      <div class="pred-row"><span class="dot"></span><span class="pred">${p.prediction}</span><span class="market">${p.marche}</span></div>
+    </button>`).join("");
+  return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics du jour</h2><span class="card-meta">${today}</span></div>
+    <p class="intro">${state.pronos.length} match${state.pronos.length>1?"s":""} retenu${state.pronos.length>1?"s":""}, triés du plus sûr au moins sûr.</p>
+    ${cards}</div>`;
+}
+
+function renderDetail(p) {
+  const crits = Object.entries(p.criteres).map(([k,v]) => `
+    <div class="crit"><div class="crit-head"><span class="crit-name">${LABELS[k]||k}</span><span class="crit-val">${v}/${MAX[k]||"?"}</span></div>
+    <div class="bar"><div class="bar-fill" style="width:${(v/(MAX[k]||1))*100}%"></div></div></div>`).join("");
+  return `<div class="screen">
+    <span class="detail-cat">${p.championnat}</span>
+    <h1 class="detail-title">${p.dom}<br><small>contre</small><br>${p.ext}</h1>
+    <p class="detail-date">${p.date}</p>
+    <div class="gauge-wrap">${gauge(p.score)}</div>
+    <div class="advice"><div class="advice-label">Notre conseil — ${p.marche}</div><div class="advice-pred">${p.prediction}</div></div>
+    <h3 class="crit-title">Comment ce score est calculé</h3>
+    ${crits}
+    <p class="disclaimer">Un score élevé indique une forte probabilité, jamais une certitude. PRONOSEBE n'est pas un opérateur de paris et n'encourage pas à parier.</p>
+  </div>`;
+}
+
+function renderHisto() {
+  const h = state.histo || { taux:0, total:0, gagnes:0, recents:[] };
+  if (h.total === 0) {
+    return `<div class="screen"><h2 class="eyebrow" style="margin-bottom:24px">Notre historique</h2>
+      <div class="silence"><p class="silence-text">L'historique se construira au fil des matchs vérifiés. Chaque pronostic y sera inscrit, gagné ou perdu, sans rien cacher.</p></div></div>`;
+  }
+  const rows = h.recents.map((r,i) => `
+    <div class="hist-row" style="${i===h.recents.length-1?'border-bottom:none':''}">
+      <div><div class="hist-match">${r.prediction}</div><div class="hist-prono">Score ${r.score_confiance}</div></div>
+      <span class="chip ${r.resultat==='gagne'?'chip-win':'chip-loss'}">${r.resultat==='gagne'?'Gagné':'Perdu'}</span>
+    </div>`).join("");
+  return `<div class="screen"><h2 class="eyebrow" style="margin-bottom:24px">Notre historique</h2>
+    <div class="hist-big"><div class="hist-rate">${h.taux}%</div><div class="hist-sub">de réussite · ${h.gagnes} gagnés / ${h.total} vérifiés</div></div>
+    <h3 class="crit-title">Derniers résultats</h3>${rows}</div>`;
+}
+
+function bindCards() {
+  document.querySelectorAll(".card").forEach(c => {
+    c.addEventListener("click", () => { state.detail = state.pronos[+c.dataset.idx]; render(); });
+  });
+}
+
+// ---- Navigation ----
+document.getElementById("backBtn").addEventListener("click", () => {
+  if (state.detail) state.detail = null; else state.vue = "accueil";
+  render();
+});
+document.getElementById("logoBtn").addEventListener("click", () => { state.detail = null; state.vue = "accueil"; render(); });
+document.getElementById("nav").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  state.vue = b.dataset.vue; state.detail = null;
+  if (state.vue === "historique" && !state.histo) chargerHisto().then(h => { state.histo = h; render(); });
+  render();
+});
+
+// ---- Démarrage ----
+(async () => {
+  render();
+  state.pronos = await chargerPronos();
+  state.loaded = true;
+  render();
+})();
+</script>
+</body>
+</html>
