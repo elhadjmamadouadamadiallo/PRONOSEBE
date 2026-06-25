@@ -137,8 +137,8 @@ const SUPABASE_KEY = "sb_publishable_B7GNA4wyMIRB9gGP9AVPmA_D-Ne9Fkj";
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const LABELS = { niveau:"Écart de niveau", dominance:"Dominance", attaque_defense:"Attaque / défense", contexte:"Contexte" };
-const MAX = { niveau:35, dominance:30, attaque_defense:20, contexte:15 };
+const LABELS = { forme:"Forme", dominance:"Dominance", attaque_defense:"Attaque / défense", contexte:"Contexte" };
+const MAX = { forme:40, dominance:20, attaque_defense:30, contexte:10 };
 
 let state = { vue:"accueil", detail:null, pronos:[], histo:null, loaded:false };
 
