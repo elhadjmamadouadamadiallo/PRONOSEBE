@@ -153,15 +153,13 @@ async function chargerPronos() {
       .eq("resultat", "en_attente")
       .order("score_confiance", { ascending:false }));
   } catch (e) {
-    alert("DIAG exception : " + (e && e.message ? e.message : String(e)));
+    console.error("chargerPronos exception :", (e && e.message) ? e.message : String(e));
     return [];
   }
   if (error) {
-    const msg = [error.message, error.details, error.hint, error.code].filter(Boolean).join(" | ");
-    alert("DIAG Supabase : " + msg);
+    console.error("chargerPronos :", [error.message, error.details, error.hint, error.code].filter(Boolean).join(" | "));
     return [];
   }
-  alert("DIAG ok : " + (data ? data.length : 0) + " ligne(s) reçue(s)");
   return (data || []).map(p => {
     const m = p.matchs_analyses || {};
     return {
