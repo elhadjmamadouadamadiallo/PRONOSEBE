@@ -145,12 +145,23 @@ let state = { vue:"accueil", detail:null, pronos:[], histo:null, loaded:false };
 // ---- Récupération des données ----
 async function chargerPronos() {
   // Jointure : pronostics publiés + détail du match analysé
-  const { data, error } = await sb
-    .from("pronostics_publies")
-    .select("*, matchs_analyses(*)")
-    .eq("resultat", "en_attente")
-    .order("score_confiance", { ascending:false });
-  if (error) { console.error(error); return []; }
+  let data, error;
+  try {
+    ({ data, error } = await sb
+      .from("pronostics_publies")
+      .select("*, matchs_analyses(*)")
+      .eq("resultat", "en_attente")
+      .order("score_confiance", { ascending:false }));
+  } catch (e) {
+    alert("DIAG exception : " + (e && e.message ? e.message : String(e)));
+    return [];
+  }
+  if (error) {
+    const msg = [error.message, error.details, error.hint, error.code].filter(Boolean).join(" | ");
+    alert("DIAG Supabase : " + msg);
+    return [];
+  }
+  alert("DIAG ok : " + (data ? data.length : 0) + " ligne(s) reçue(s)");
   return (data || []).map(p => {
     const m = p.matchs_analyses || {};
     return {
@@ -158,7 +169,7 @@ async function chargerPronos() {
       dom: m.equipe_dom || "?", ext: m.equipe_ext || "?",
       championnat: m.championnat || "Coupe du Monde 2026",
       favori: m.favori || "", date: formatDate(m.date_match),
-      score: p.score_confiance, prediction: p.prediction,
+      score: Math.min(99, p.score_confiance ?? 0), prediction: p.prediction,
       marche: p.marche === "victoire" ? "Victoire" : "Double chance",
       criteres: m.detail_scores || {},
     };
@@ -272,7 +283,7 @@ function renderHisto() {
   }
   const rows = h.recents.map((r,i) => `
     <div class="hist-row" style="${i===h.recents.length-1?'border-bottom:none':''}">
-      <div><div class="hist-match">${r.prediction}</div><div class="hist-prono">Score ${r.score_confiance}</div></div>
+      <div><div class="hist-match">${r.prediction}</div><div class="hist-prono">Score ${Math.min(99, r.score_confiance)}</div></div>
       <span class="chip ${r.resultat==='gagne'?'chip-win':'chip-loss'}">${r.resultat==='gagne'?'Gagné':'Perdu'}</span>
     </div>`).join("");
   return `<div class="screen"><h2 class="eyebrow" style="margin-bottom:24px">Notre historique</h2>
