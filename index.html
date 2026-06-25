@@ -230,9 +230,8 @@ function render() {
 }
 
 function renderAccueil() {
-  const today = new Date().toLocaleDateString("fr-FR", { day:"numeric", month:"long" });
   if (state.pronos.length === 0) {
-    return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics du jour</h2><span class="card-meta">${today}</span></div>
+    return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics à venir</h2></div>
       <div class="silence">
         <div class="silence-title">On ne parle que<br>quand on sait.</div>
         <p class="silence-text">Aucun match ne remplit nos critères aujourd'hui. Revenez demain — le silence aussi est un conseil.</p>
@@ -244,7 +243,7 @@ function renderAccueil() {
       <div class="teams"><span class="team">${p.dom}</span><span class="vs">vs</span><span class="team">${p.ext}</span></div>
       <div class="pred-row"><span class="dot"></span><span class="pred">${p.prediction}</span><span class="market">${p.marche}</span></div>
     </button>`).join("");
-  return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics du jour</h2><span class="card-meta">${today}</span></div>
+  return `<div class="screen"><div class="top-row"><h2 class="eyebrow">Pronostics à venir</h2></div>
     <p class="intro">${state.pronos.length} match${state.pronos.length>1?"s":""} retenu${state.pronos.length>1?"s":""}, triés du plus sûr au moins sûr.</p>
     ${cards}</div>`;
 }
